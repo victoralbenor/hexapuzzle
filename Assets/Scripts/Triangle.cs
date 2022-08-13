@@ -16,20 +16,23 @@ public class Triangle : MonoBehaviour
                 out var hit
             ))
         {
-            if (canLog) Debug.Log($"{name} from {transform.parent.parent.name} is adjacent to {hit.transform.name} from {hit.transform.parent.parent.name}");
             _adjacentTriangle = hit.transform.GetComponent<Triangle>();
         }
             
     }
 
+    // After rotation, sphere enters new triangle
     private void OnTriggerEnter(Collider col)
     {
-        //Debug.Log(other.GetComponent<MeshRenderer>().material.name);
-        sphere = col.GetComponent<Sphere>();
+        // Get incoming sphere
+        if(!col.TryGetComponent<Sphere>(out var s)) return;
+        sphere = s;
+        
         if (_adjacentTriangle && _adjacentTriangle.sphere)
         {
-            Debug.Log("Tenho adj");
-            if (sphere.transform.GetComponent<MeshRenderer>().material.name ==
+            if (!sphere.transform.TryGetComponent<MeshRenderer>(out var sphereMeshRenderer)) return;
+
+            if (sphereMeshRenderer.material.name ==
                 _adjacentTriangle.sphere.transform.GetComponent<MeshRenderer>().material.name)
             {
                 Debug.Log("Cor igual");
