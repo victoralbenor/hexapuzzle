@@ -3,10 +3,14 @@ using UnityEngine;
 
 public class Sphere : MonoBehaviour
 {
-    public string materialName;
-
+    [HideInInspector] public string materialName;
+    private ParticleSystem _particleSystem;
+    
     private void Start()
     {
-        materialName = GetComponent<MeshRenderer>().material.name;
+        var material = GetComponent<MeshRenderer>().material;
+        materialName = material.name;
+        var particleSystemMain = _particleSystem.main;
+        particleSystemMain.startColor = material.color;
     }
 }
