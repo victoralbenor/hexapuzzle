@@ -1,50 +1,41 @@
-using System;
-using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Rotate : MonoBehaviour
 {
-    public float duration;
+    [FormerlySerializedAs("rotateSpeed")] public float speed;
 
     private Camera _mainCamera;
-    private Ray _ray;
-    private RaycastHit _hit;
-    private LayerMask _layerMask;
-    private bool _isRotating;
+    private float _rotationProgress;
+    private LayerMask _clickLayerMask;
     private Quaternion _targetRotation;
-    public float rotateSpeed;
-    private float _t;
 
     private void Start()
     {
         _mainCamera = Camera.main;
-        _layerMask = LayerMask.GetMask("Hexagon");
+        _rotationProgress = 1f;
+        _clickLayerMask = 1 << gameObject.layer;
     }
     
     private void Update()
     {
-        if (_isRotating)
-        {
-            _t += rotateSpeed * Time.deltaTime;
-            transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, _t);
-            if (_t >= 1f) _isRotating = false;
-        }
-        else
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                _ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+        if (_rotationProgress >= 1f) CheckForInput(); 
+        else ContinueRotation(); 
+    }
 
-                if (Physics.Raycast(_ray, out _hit, 1000f, _layerMask))
-                {
-                    if (_hit.transform == transform)
-                    {
-                        _isRotating = true;
-                        _t = 0f;
-                        _targetRotation = transform.rotation * Quaternion.AngleAxis(60f, Vector3.forward);
-                    }
-                }
-            }
-        }
+    private void CheckForInput()
+    {
+        if (!Input.GetMouseButtonDown(0)) return;
+        var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+        if (!Physics.Raycast(ray, out var hit, 1000f, _clickLayerMask)) return;
+        if (hit.transform != transform) return;
+        _rotationProgress = 0f;
+        _targetRotation = transform.rotation * Quaternion.AngleAxis(60f, Vector3.forward);
+    }
+
+    private void ContinueRotation()
+    {
+        _rotationProgress += speed * Time.deltaTime;
+        transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, _rotationProgress);
     }
 }

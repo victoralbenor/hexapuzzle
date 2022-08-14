@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7533402749736221836}
   - component: {fileID: 7533402749736221827}
   m_Layer: 0
-  m_Name: TriangleCollider
+  m_Name: SliceCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

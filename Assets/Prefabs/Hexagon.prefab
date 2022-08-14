@@ -1384,7 +1384,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ced046088636b024288948a68225ec92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.1
+  clickLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
   rotateSpeed: 4
 --- !u!1001 &6605641319214295853
 PrefabInstance:
