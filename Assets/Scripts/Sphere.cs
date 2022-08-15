@@ -21,7 +21,6 @@ public class Sphere : MonoBehaviour
 
     public void PlayAnimation()
     {
-        Debug.Log("PlayAnimation");
         _animator.SetTrigger(Grow);
     }
 
