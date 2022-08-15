@@ -24,7 +24,7 @@ public class Slice : MonoBehaviour
 
         if (!_adjacentSlice || !_adjacentSlice.sphere) return; // Do I have an adjacent slice that contains a sphere?
         if (sphere.materialName != _adjacentSlice.sphere.materialName) return; // Are the material names the same?  
-        Destroy(_adjacentSlice.sphere.gameObject);
-        Destroy(sphere.gameObject);
+        _adjacentSlice.sphere.PlayAnimation();
+        sphere.PlayAnimation();
     }
 }

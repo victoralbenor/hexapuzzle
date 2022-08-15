@@ -1,16 +1,42 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Sphere : MonoBehaviour
 {
+    public GameObject effectsGameObject;
     [HideInInspector] public string materialName;
-    private ParticleSystem _particleSystem;
     
+    private Animator _animator;
+    private Material _material;
+    private static readonly int Grow = Animator.StringToHash("Grow");
+
     private void Start()
     {
-        var material = GetComponent<MeshRenderer>().material;
-        materialName = material.name;
-        var particleSystemMain = _particleSystem.main;
-        particleSystemMain.startColor = material.color;
+        _animator = GetComponent<Animator>();
+        _material = GetComponent<MeshRenderer>().material;
+        
+        materialName = _material.name;
     }
+
+    public void PlayAnimation()
+    {
+        Debug.Log("PlayAnimation");
+        _animator.SetTrigger(Grow);
+    }
+
+    // Called from animation event
+    public void PlayEffects()
+    {
+        var psObj = Instantiate(effectsGameObject, transform.position, Quaternion.identity);
+        var particleSystemMain = psObj.GetComponent<ParticleSystem>().main;
+        particleSystemMain.startColor = _material.color;
+        DestroySphere();
+    }
+
+    private void DestroySphere()
+    {
+        Destroy(gameObject);
+    }
+
 }
